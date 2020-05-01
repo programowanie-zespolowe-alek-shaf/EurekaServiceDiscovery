@@ -1,0 +1,58 @@
+version: '3'
+networks:
+  common-network:
+
+services:
+  eureka-service:
+    container_name: eureka-service
+    restart: always
+    build: .
+    ports:
+      - 8761:8761    # original port : destination port
+    networks:
+      - common-network
+  product-database:
+    container_name: product-database
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    build:
+      context: ../ProductCatalogMS/.
+      dockerfile: docker/db/Dockerfile
+    networks:
+      - common-network
+  product-service:
+    container_name: product-service
+    restart: always
+    build:
+      context: ../ProductCatalogMS/.
+      dockerfile: docker/api/Dockerfile
+    networks:
+      - common-network
+  customer-database:
+    container_name: customer-database
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    build:
+      context: ../CustomersMS/.
+      dockerfile: docker/db/Dockerfile
+    networks:
+      - common-network
+  customer-service:
+    container_name: customer-service
+    restart: always
+    build:
+      context: ../CustomersMS/.
+      dockerfile: docker/api/Dockerfile
+    networks:
+      - common-network
+  gateway-service:
+    container_name: gateway-service
+    restart: always
+    build:
+      context: ../ApiGatewayMS/.
+    ports:
+      - 8080:8080    # original port : destination port
+    networks:
+      - common-network
