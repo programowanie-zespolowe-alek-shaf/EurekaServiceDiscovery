@@ -24,6 +24,14 @@ services:
   product-service:
     container_name: product-service
     restart: always
+    environment:
+      - MYSQL_CUSTOMER_DB_HOST=product-database
+      - MYSQL_CUSTOMER_DB_PORT=3306
+      - MYSQL_CUSTOMER_DATABASE=product
+      - MYSQL_CUSTOMER_DB_USERNAME=product
+      - MYSQL_CUSTOMER_DB_PASSWORD=product
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../ProductCatalogMS/.
       dockerfile: docker/api/Dockerfile
@@ -42,6 +50,14 @@ services:
   customer-service:
     container_name: customer-service
     restart: always
+    environment:
+      - MYSQL_CUSTOMER_DB_HOST=customer-database
+      - MYSQL_CUSTOMER_DB_PORT=3306
+      - MYSQL_CUSTOMER_DATABASE=customer
+      - MYSQL_CUSTOMER_DB_USERNAME=customer
+      - MYSQL_CUSTOMER_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../CustomersMS/.
       dockerfile: docker/api/Dockerfile
@@ -50,6 +66,14 @@ services:
   gateway-service:
     container_name: gateway-service
     restart: always
+    environment:
+      - MYSQL_CUSTOMER_DB_HOST=customer-database
+      - MYSQL_CUSTOMER_DB_PORT=3306
+      - MYSQL_CUSTOMER_DATABASE=customer
+      - MYSQL_CUSTOMER_DB_USERNAME=customer
+      - MYSQL_CUSTOMER_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../ApiGatewayMS/.
     ports:
