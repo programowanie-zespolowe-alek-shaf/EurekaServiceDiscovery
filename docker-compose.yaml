@@ -67,13 +67,7 @@ services:
     container_name: order-database
     restart: always
     environment:
-      - MYSQL_CUSTOMER_DB_HOST=order-database
-      - MYSQL_CUSTOMER_DB_PORT=3306
-      - MYSQL_CUSTOMER_DATABASE=order
-      - MYSQL_CUSTOMER_DB_USERNAME=order
-      - MYSQL_CUSTOMER_DB_PASSWORD=order
-      - EUREKA_HOST=eureka-service
-      - EUREKA_PORT=8761
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     build:
       context: ../OrderManagementMS/.
       dockerfile: docker/db/Dockerfile
@@ -82,6 +76,14 @@ services:
   order-service:
     container_name: order-service
     restart: always
+    environment:
+      - MYSQL_CUSTOMER_DB_HOST=order-database
+      - MYSQL_CUSTOMER_DB_PORT=3306
+      - MYSQL_CUSTOMER_DATABASE=order
+      - MYSQL_CUSTOMER_DB_USERNAME=order
+      - MYSQL_CUSTOMER_DB_PASSWORD=order
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../OrderManagementMS/.
       dockerfile: docker/api/Dockerfile
