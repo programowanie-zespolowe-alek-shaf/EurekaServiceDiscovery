@@ -24,9 +24,16 @@ services:
   product-service:
     container_name: product-service
     restart: always
+    environment:
+      - MYSQL_DB_HOST=product-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=product
+      - MYSQL_DB_USERNAME=product
+      - MYSQL_DB_PASSWORD=product
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../ProductCatalogMS/.
-      dockerfile: docker/api/Dockerfile
     networks:
       - common-network
   customer-database:
@@ -42,17 +49,73 @@ services:
   customer-service:
     container_name: customer-service
     restart: always
+    environment:
+      - MYSQL_DB_HOST=customer-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=customer
+      - MYSQL_DB_USERNAME=customer
+      - MYSQL_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../CustomersMS/.
-      dockerfile: docker/api/Dockerfile
+    networks:
+      - common-network
+  order-database:
+    container_name: order-database
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    build:
+      context: ../OrderManagementMS/.
+      dockerfile: docker/db/Dockerfile
+    networks:
+      - common-network
+  order-service:
+    container_name: order-service
+    restart: always
+    environment:
+      - MYSQL_DB_HOST=order-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=order
+      - MYSQL_DB_USERNAME=order
+      - MYSQL_DB_PASSWORD=order
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
+    build:
+      context: ../OrderManagementMS/.
+    networks:
+      - common-network
+  login-service:
+    container_name: login-service
+    restart: always
+    environment:
+      - MYSQL_DB_HOST=customer-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=customer
+      - MYSQL_DB_USERNAME=customer
+      - MYSQL_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
+    build:
+      context: ../LoginMS/.
     networks:
       - common-network
   gateway-service:
     container_name: gateway-service
     restart: always
+    environment:
+      - MYSQL_DB_HOST=customer-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=customer
+      - MYSQL_DB_USERNAME=customer
+      - MYSQL_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
     build:
       context: ../ApiGatewayMS/.
     ports:
       - 8080:8080    # original port : destination port
     networks:
       - common-network
+
