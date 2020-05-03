@@ -86,6 +86,23 @@ services:
       context: ../OrderManagementMS/.
     networks:
       - common-network
+  login-service:
+    container_name: login-service
+    restart: always
+    environment:
+      - MYSQL_DB_HOST=customer-database
+      - MYSQL_DB_PORT=3306
+      - MYSQL_DATABASE=customer
+      - MYSQL_DB_USERNAME=customer
+      - MYSQL_DB_PASSWORD=customer
+      - EUREKA_HOST=eureka-service
+      - EUREKA_PORT=8761
+    build:
+      context: ../LoginMS/.
+    ports:
+      - 8080:8080    # original port : destination port
+    networks:
+      - common-network
   gateway-service:
     container_name: gateway-service
     restart: always
