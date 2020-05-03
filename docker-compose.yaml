@@ -99,8 +99,6 @@ services:
       - EUREKA_PORT=8761
     build:
       context: ../LoginMS/.
-    ports:
-      - 8080:8080    # original port : destination port
     networks:
       - common-network
   gateway-service:
