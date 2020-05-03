@@ -34,7 +34,6 @@ services:
       - EUREKA_PORT=8761
     build:
       context: ../ProductCatalogMS/.
-      dockerfile: docker/api/Dockerfile
     networks:
       - common-network
   customer-database:
@@ -60,7 +59,6 @@ services:
       - EUREKA_PORT=8761
     build:
       context: ../CustomersMS/.
-      dockerfile: docker/api/Dockerfile
     networks:
       - common-network
   order-database:
@@ -86,7 +84,6 @@ services:
       - EUREKA_PORT=8761
     build:
       context: ../OrderManagementMS/.
-      dockerfile: docker/api/Dockerfile
     networks:
       - common-network
   gateway-service:
