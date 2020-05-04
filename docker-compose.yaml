@@ -86,32 +86,34 @@ services:
       context: ../OrderManagementMS/.
     networks:
       - common-network
-  login-service:
-    container_name: login-service
+  cart-database:
+    container_name: cart-database
     restart: always
     environment:
-      - MYSQL_DB_HOST=customer-database
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    build:
+      context: ../ShoppingCardMS/.
+      dockerfile: docker/db/Dockerfile
+    networks:
+      - common-network
+  cart-service:
+    container_name: cart-service
+    restart: always
+    environment:
+      - MYSQL_DB_HOST=cart-database
       - MYSQL_DB_PORT=3306
-      - MYSQL_DATABASE=customer
-      - MYSQL_DB_USERNAME=customer
-      - MYSQL_DB_PASSWORD=customer
+      - MYSQL_DATABASE=shopping
+      - MYSQL_DB_USERNAME=shopping
+      - MYSQL_DB_PASSWORD=shopping
       - EUREKA_HOST=eureka-service
       - EUREKA_PORT=8761
     build:
-      context: ../LoginMS/.
+      context: ../ShoppingCardMS/.
     networks:
       - common-network
   gateway-service:
     container_name: gateway-service
     restart: always
-    environment:
-      - MYSQL_DB_HOST=customer-database
-      - MYSQL_DB_PORT=3306
-      - MYSQL_DATABASE=customer
-      - MYSQL_DB_USERNAME=customer
-      - MYSQL_DB_PASSWORD=customer
-      - EUREKA_HOST=eureka-service
-      - EUREKA_PORT=8761
     build:
       context: ../ApiGatewayMS/.
     ports:
